@@ -22,6 +22,7 @@ def main():
         io.write_error(OUTPUT_FILE, "LINDEP", "Linearly dependent equations")
     else:
         io.write_result(OUTPUT_FILE, xx)
+        pass
 
 
 if __name__ == '__main__':
