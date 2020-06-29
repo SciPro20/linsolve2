@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 import linsolver.io as io
 
-_DESCRIPTION = '''Input generator for the linsolve program.'''
+_DESCRIPTION = '''Creates a random input for the linsolve program.'''
 
 
 def main():
