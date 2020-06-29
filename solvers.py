@@ -10,10 +10,11 @@ def gaussian_eliminate(aa, bb):
 
     Args:
         aa: Matrix with the coefficients. Shape: (n, n).
-        bb: Right hand side of the equation. Shape: (n,)
+        bb: Right hand side of the equation. Shape: (n,) or (n, nrhs).
 
     Returns:
-        Vector xx with the solution of the linear equation.
+        Array xx with the solution of the linear equation. Shape (n,) or
+        (n, nrhs):
 
     Raises:
         ValueError: if the system of equation is close to linear dependency.
@@ -29,7 +30,7 @@ def gaussian_eliminate(aa, bb):
             aa[jj, ii:] += coeff * aa[ii, ii:]
             bb[jj] += coeff * bb[ii]
 
-    xx = np.empty((nn,), dtype=float)
+    xx = np.empty(bb.shape, dtype=float)
     for ii in range(nn - 1, -1, -1):
         xx[ii] = (bb[ii] - np.dot(aa[ii, ii + 1:], xx[ii + 1:])) / aa[ii, ii]
     return xx

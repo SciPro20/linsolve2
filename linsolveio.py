@@ -1,5 +1,4 @@
 '''Contains input output routines for the equation solver.'''
-import sys
 import numpy as np
 
 
@@ -19,13 +18,13 @@ def read_input(inputfile):
     inparray = np.loadtxt(inputfile)
     ndim = inparray.shape[1]
     aa = np.array(inparray[0:ndim, 0:ndim])
-    bb = np.array(inparray[ndim, 0:ndim])
-    return aa, bb
+    bb = np.array(inparray[ndim:, 0:ndim])
+    return aa, bb.transpose()
 
 
 def write_error(filename, errortype, errormsg):
     '''Writes an output file with an error message.
-    
+
     Args:
         filename: Name of the file to write.
         errortype: Short string identifying the type of the error.
@@ -40,11 +39,13 @@ def write_result(filename, xx):
 
     Args:
         filename: Name of the file where the results should be written to.
-        xx: Solution vector.
+        xx: Solution vectors. Shape (n, nrhs) or (n,) where n is the dimension
+            of the system and nrhs the nr. of right hand side vectors for
+            which a solution had been calculated. (Each solution vector is
+            a column vector.)
     '''
-    # Converting to (1, n) matrix to ensure that all numbers of the solution
-    # vector appear in one row.
-    xrow = np.reshape(xx, (1, -1))
+    xcol = xx.reshape((-1, 1)) if len(xx.shape) == 1 else xx
+    xrow = xcol.transpose()
     np.savetxt(filename, xrow)
 
 
