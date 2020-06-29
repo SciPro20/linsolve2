@@ -1,17 +1,51 @@
 #!/usr/bin/env python3
 "Script generating random input for the linsolve program"
-
+import os.path
+import argparse
 import numpy as np
 
-_NR_VARIABLES = 4000
+_DESCRIPTION = '''Input generator for the linsolve program.'''
 
 
 def main():
     "Main script functionality"
-    out = np.empty((_NR_VARIABLES + 1, _NR_VARIABLES))
-    out[:_NR_VARIABLES, :] = np.random.rand(_NR_VARIABLES, _NR_VARIABLES)
-    out[_NR_VARIABLES, :] = np.random.rand(_NR_VARIABLES)
-    np.savetxt('linsolve.in', out)
+
+    args = _parse_arguments()
+    aa, bb = _get_random_input(args.nvars, args.nrhs, args.lower, args.upper)
+    _write_input(args.directory, aa, bb)
+
+
+def _parse_arguments():
+    parser = argparse.ArgumentParser(description=_DESCRIPTION)
+    msg = 'Nr. of variables'
+    parser.add_argument('nvars', type=int, metavar='NVARS', help=msg)
+    msg = 'Nr. of rhs-vectors'
+    parser.add_argument('nrhs', type=int, metavar='NRHS', help=msg)
+    msg = 'Directory, where the input file should be created (default .)'
+    parser.add_argument('-d', '--directory', default='.', metavar='DIR',
+                        help=msg)
+    msg = 'Lower bound for the random numbers (default: 0.0)'
+    parser.add_argument('-l', '--lower', default=0.0, type=float, help=msg)
+    msg = 'Upper bound for the random numbers (default: 1.0)'
+    parser.add_argument('-u', '--upper', default=1.0, type=float, help=msg)
+    args = parser.parse_args()
+    return args
+
+
+def _get_random_input(nvars, nrhs, xlower, xupper):
+    aa = xlower + np.random.rand(nvars, nvars) * (xupper - xlower)
+    bb = xlower + np.random.rand(nvars, nrhs) * (xupper - xlower)
+    return aa, bb
+
+
+def _write_input(directory, aa, bb):
+    nvars = aa.shape[0]
+    nrhs = bb.shape[1]
+    buffer = np.empty((nvars + nrhs, nvars), dtype=float)
+    buffer[:nvars, :] = aa
+    buffer[nvars:, :] = bb.transpose()
+    fname = os.path.join(directory, 'linsolve.in')
+    np.savetxt(fname, buffer)
 
 
 if __name__ == '__main__':
