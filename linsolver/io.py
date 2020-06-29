@@ -1,4 +1,4 @@
-'''Contains input output routines for the equation solver.'''
+'''Input/output routines for the equation solver.'''
 import numpy as np
 
 
@@ -20,6 +20,22 @@ def read_input(inputfile):
     aa = np.array(inparray[0:ndim, 0:ndim])
     bb = np.array(inparray[ndim:, 0:ndim])
     return aa, bb.transpose()
+
+
+def write_input(inputfile, aa, bb):
+    '''Writes an input for the linsolve script
+
+    Args:
+        inputfile: Name of the input file to write.
+        aa: Coefficient matrix
+        bb: Array with the RHS-vectors (as column vectors)
+    '''
+    nvars = aa.shape[0]
+    nrhs = bb.shape[1]
+    buffer = np.empty((nvars + nrhs, nvars), dtype=float)
+    buffer[:nvars, :] = aa
+    buffer[nvars:, :] = bb.transpose()
+    np.savetxt(inputfile, buffer)
 
 
 def write_error(filename, errortype, errormsg):

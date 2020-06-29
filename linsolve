@@ -3,8 +3,8 @@
 import sys
 import os.path
 import argparse
-import solvers
-import linsolveio as io
+import linsolvers.solvers as solvers
+import linsolvers.io as io
 
 _INPUT_FILE = 'linsolve.in'
 _OUTPUT_FILE = 'linsolve.out'

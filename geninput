@@ -3,6 +3,7 @@
 import os.path
 import argparse
 import numpy as np
+import linsolver.io as io
 
 _DESCRIPTION = '''Input generator for the linsolve program.'''
 
@@ -12,7 +13,7 @@ def main():
 
     args = _parse_arguments()
     aa, bb = _get_random_input(args.nvars, args.nrhs, args.lower, args.upper)
-    _write_input(args.directory, aa, bb)
+    io.write_input(os.path.join(args.directory, 'linsolve.in'), aa, bb)
 
 
 def _parse_arguments():
@@ -36,16 +37,6 @@ def _get_random_input(nvars, nrhs, xlower, xupper):
     aa = xlower + np.random.rand(nvars, nvars) * (xupper - xlower)
     bb = xlower + np.random.rand(nvars, nrhs) * (xupper - xlower)
     return aa, bb
-
-
-def _write_input(directory, aa, bb):
-    nvars = aa.shape[0]
-    nrhs = bb.shape[1]
-    buffer = np.empty((nvars + nrhs, nvars), dtype=float)
-    buffer[:nvars, :] = aa
-    buffer[nvars:, :] = bb.transpose()
-    fname = os.path.join(directory, 'linsolve.in')
-    np.savetxt(fname, buffer)
 
 
 if __name__ == '__main__':

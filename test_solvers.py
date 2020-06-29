@@ -4,9 +4,8 @@
 import os.path
 import pytest
 import numpy as np
-import numpy.linalg as linalg
-import solvers
-import linsolveio as io
+import linsolver.solvers as solvers
+import linsolver.io as io
 
 
 ABSOLUTE_TOLERANCE = 1e-10
