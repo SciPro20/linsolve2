@@ -4,6 +4,7 @@
 import os.path
 import pytest
 import numpy as np
+import numpy.linalg as linalg
 import solvers
 import linsolveio as io
 
@@ -37,7 +38,7 @@ def test_elimination(testname):
     xx_expected = get_test_output(testname)
     if xx_expected is None:
         # Linear system of equations can not be solved -> expecting exception
-        with pytest.raises(ValueError):
+        with pytest.raises(np.linalg.LinAlgError):
             solvers.gaussian_eliminate(aa, bb)
     else:
         xx_gauss = solvers.gaussian_eliminate(aa, bb)
