@@ -14,7 +14,7 @@ RELATIVE_TOLERANCE = 1e-10
 
 TESTDATADIR = 'testdata'
 
-TESTS = ['simple', 'needs_pivot', 'linearly_dependant']
+TESTS = ['simple', 'needs_pivot', 'linearly_dependant', 'multiple']
 
 
 def get_test_input(testname):
@@ -42,6 +42,11 @@ def test_elimination(testname):
             solvers.gaussian_eliminate(aa, bb)
     else:
         xx_gauss = solvers.gaussian_eliminate(aa, bb)
+        # Make sure, both vectors are row vectors so that they can be compared
+        if len(xx_expected.shape) == 1:
+            xx_expected.shape = (1, xx_expected.shape[0])
+        xx_expected = xx_expected.transpose()
+        xx_gauss.shape = (xx_gauss.shape[0], -1)
         assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE,
                            rtol=RELATIVE_TOLERANCE)
 

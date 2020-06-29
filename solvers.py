@@ -7,10 +7,11 @@ def gaussian_eliminate(aa, bb):
 
     Args:
         aa: Matrix with the coefficients. Shape: (n, n).
-        bb: Right hand side of the equation. Shape: (n,)
+        bb: Right hand side of the equation. Shape: (n,) or (n, nrhs).
 
     Returns:
-        Vector xx with the solution of the linear equation.
+        Array xx with the solution of the linear equation. Shape (n,) or
+        (n, nrhs):
 
     Raises:
         numpy.linalg.LinAlgError: if the system of equation is close to linear
