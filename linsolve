@@ -1,28 +1,41 @@
 #!/usr/bin/env python3
 '''Solves a linear system of equations.'''
 import sys
+import os.path
+import argparse
 import solvers
 import linsolveio as io
 
-INPUT_FILE = 'linsolve.in'
-OUTPUT_FILE = 'linsolve.out'
+_INPUT_FILE = 'linsolve.in'
+_OUTPUT_FILE = 'linsolve.out'
 
 
 def main():
     '''Main driver routine.'''
+    args = _parse_arguments()
+    infilepath = os.path.join(args.directory, _INPUT_FILE)
     try:
-        aa, bb = io.read_input(INPUT_FILE)
+        aa, bb = io.read_input(infilepath)
     except OSError as exc:
-        print("Failed to read input file '{}'".format(INPUT_FILE))
+        print("Failed to read input file '{}'".format(infilepath))
         print("Execption raised: {}".format(exc))
         sys.exit(1)
+    outfilepath = os.path.join(args.directory, _OUTPUT_FILE)
     try:
         xx = solvers.gaussian_eliminate(aa, bb)
     except ValueError:
-        io.write_error(OUTPUT_FILE, "LINDEP", "Linearly dependent equations")
+        io.write_error(outfilepath, "LINDEP", "Linearly dependent equations")
     else:
-        io.write_result(OUTPUT_FILE, xx)
-        pass
+        io.write_result(outfilepath, xx)
+
+
+def _parse_arguments():
+    parser = argparse.ArgumentParser()
+    msg = 'Directory, where input file is located and where output should be'\
+        ' written to (default: .)'
+    parser.add_argument('-d', '--directory', default='.', help=msg)
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == '__main__':
