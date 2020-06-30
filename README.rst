@@ -2,7 +2,8 @@
 Linsolver
 *********
 
-Linsolver is a package for solving linear systems of equations Ax=b.
+Linsolver is a teaching demonstration package for solving linear systems of
+equations Ax=b.
 
 
 Prerequisites
